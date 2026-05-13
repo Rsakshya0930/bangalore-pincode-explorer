@@ -10,9 +10,9 @@ const App = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [error, setError] = useState('');
 
-  // Fetch all areas on load
+  // Fetch all areas on load from the live Render API
   useEffect(() => {
-    axios.get('http://localhost:8000/api/areas')
+    axios.get('https://bangalore-pincode-explorer-backend.onrender.com/api/areas')
       .then(res => setAreas(res.data))
       .catch(err => console.error("Error fetching areas:", err));
   }, []);
@@ -21,8 +21,8 @@ const App = () => {
     setError('');
     try {
       const url = type === 'pincode' 
-        ? `http://localhost:8000/api/lookup?pincode=${query}`
-        : `http://localhost:8000/api/lookup?area=${query}`;
+        ? `https://bangalore-pincode-explorer-backend.onrender.com/api/lookup?pincode=${query}`
+        : `https://bangalore-pincode-explorer-backend.onrender.com/api/lookup?area=${query}`;
       
       const res = await axios.get(url);
       setSelectedLocation(res.data);
