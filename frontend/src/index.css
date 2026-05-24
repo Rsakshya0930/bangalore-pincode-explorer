@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* A small reset to ensure the map fills the screen perfectly */
 html, body, #root {
   margin: 0;
   padding: 0;

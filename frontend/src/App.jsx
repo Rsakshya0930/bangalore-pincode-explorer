@@ -4,16 +4,25 @@ import MapView from './components/MapView';
 import SearchBar from './components/Searchbar';
 import InfoPanel from './components/InfoPanel';
 import Sidebar from './components/Sidebar';
-
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const App = () => {
   const [areas, setAreas] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [error, setError] = useState('');
 
-  // Fetch all areas on load from the live Render API
+  // Fetch all areas on load
   useEffect(() => {
-    axios.get('https://bangalore-pincode-explorer-backend.onrender.com/api/areas')
-      .then(res => setAreas(res.data))
+    const fetchUrl = `${API_BASE_URL}/api/areas`;
+    console.log("Axios is trying to fetch from:", fetchUrl); 
+    
+    axios.get(fetchUrl)
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setAreas(res.data);
+        } else {
+          console.error("Backend returned invalid data. Check the URL!");
+        }
+      })
       .catch(err => console.error("Error fetching areas:", err));
   }, []);
 
@@ -21,8 +30,8 @@ const App = () => {
     setError('');
     try {
       const url = type === 'pincode' 
-        ? `https://bangalore-pincode-explorer-backend.onrender.com/api/lookup?pincode=${query}`
-        : `https://bangalore-pincode-explorer-backend.onrender.com/api/lookup?area=${query}`;
+        ? `${API_BASE_URL}/api/lookup?pincode=${query}`
+        : `${API_BASE_URL}/api/lookup?area=${query}`;
       
       const res = await axios.get(url);
       setSelectedLocation(res.data);
